@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXSlider?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+         prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1"
+         xmlns="http://javafx.com/javafx/8.0.141" fx:controller="container.main.MainController">
+   <Tab text="Countdown timer">
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="tab-body">
+         <VBox layoutX="11.0" layoutY="19.0" prefHeight="334.0" prefWidth="573.0">
+            <Label fx:id="lbScreen_ct" alignment="CENTER" contentDisplay="CENTER" prefHeight="63.0"
+                   prefWidth="573.0" text="00:00:00:00">
+               <font>
+                  <Font name="Century Schoolbook Bold" size="49.0"/>
+               </font>
+            </Label>
+            <HBox prefHeight="221.0" prefWidth="573.0">
+               <VBox prefHeight="219.0" prefWidth="432.0">
+                  <Pane prefHeight="221.0" prefWidth="383.0">
+                     <Label layoutX="14.0" layoutY="52.0" prefHeight="27.0" prefWidth="81.0"
+                            text="Hours"/>
+                     <JFXSlider fx:id="sliderHrs" layoutX="105.0" layoutY="58.0" max="23.0"
+                                prefHeight="14.0" prefWidth="219.0"/>
+                     <Label fx:id="lbHours" alignment="BOTTOM_RIGHT"
+                            layoutX="331.0" layoutY="45.0" prefHeight="30.0" prefWidth="47.0"
+                            styleClass="label-timer" text="00">
+                        <font>
+                           <Font name="Century Schoolbook Bold" size="15.0"/>
+                        </font>
+                     </Label>
+                     <Label layoutX="14.0" layoutY="94.0" prefHeight="27.0" prefWidth="81.0"
+                            text="Minutes"/>
+                     <JFXSlider fx:id="sliderMin" layoutX="105.0" layoutY="100.0" max="59.0"
+                                prefHeight="14.0" prefWidth="219.0"/>
+                     <Label fx:id="lbMinutes" alignment="BOTTOM_RIGHT"
+                            layoutX="331.0" layoutY="87.0" prefHeight="30.0" prefWidth="47.0"
+                            styleClass="label-timer" text="00">
+                        <font>
+                           <Font name="Century Schoolbook Bold" size="15.0"/>
+                        </font>
+                     </Label>
+                     <Label layoutX="14.0" layoutY="141.0" prefHeight="27.0" prefWidth="81.0"
+                            text="Seconds"/>
+                     <JFXSlider fx:id="sliderSec" layoutX="105.0" layoutY="147.0" max="59.0"
+                                prefHeight="14.0" prefWidth="219.0"/>
+                     <Label fx:id="lbSeconds" alignment="BOTTOM_RIGHT"
+                            layoutX="331.0" layoutY="134.0" prefHeight="30.0" prefWidth="47.0"
+                            styleClass="label-timer" text="00">
+                        <font>
+                           <Font name="Century Schoolbook Bold" size="15.0"/>
+                        </font>
+                     </Label>
+                  </Pane>
+               </VBox>
+               <Separator opacity="0.49" orientation="VERTICAL" prefHeight="219.0"
+                          prefWidth="9.0" style="-fx-background-color: silver;"/>
+               <Pane prefHeight="219.0" prefWidth="233.0">
+                  <JFXComboBox layoutX="15.0" layoutY="86.0" prefHeight="25.0" prefWidth="154.0"
+                               promptText="Select ringtone"/>
+                  <Label layoutX="15.0" layoutY="69.0" prefHeight="17.0" prefWidth="74.0"
+                         text="Ringtone"/>
+                  <JFXCheckBox layoutX="15.0" layoutY="132.0" prefHeight="18.0" prefWidth="140.0"
+                               text="Repeat"/>
+               </Pane>
+            </HBox>
+            <ButtonBar depthTest="ENABLE" prefHeight="55.0" prefWidth="573.0">
+               <buttons>
+                  <JFXButton fx:id="btnAction_ct" prefHeight="25.0" prefWidth="105.0" text="Start"/>
+               </buttons>
+               <padding>
+                  <Insets right="230.0"/>
+               </padding>
+            </ButtonBar>
+         </VBox>
+      </AnchorPane>
+   </Tab>
+   <Tab text="Boxing timer">
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="tab-body"/>
+   </Tab>
+</TabPane>

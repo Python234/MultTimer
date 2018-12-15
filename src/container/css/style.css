@@ -1,0 +1,61 @@
+.root {
+    -fx-text-background-color: white;
+}
+
+/* TAB Head */
+.tab-pane .tab-header-area .headers-region,
+.tab-pane .tab-header-area .headers-region .tab,
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: #3a347f;
+}
+
+.tab-pane .tab-header-area .headers-region .tab {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+
+.tab-pane .tab-header-area .headers-region .tab:hover {
+    -fx-background-color: brown;
+}
+
+.tab-pane .tab-header-area .headers-region .tab:selected {
+    -fx-background-color: #3a34ff;
+    -fx-border-color: #3a34ff;
+}
+
+.tab-pane .tab-header-area .headers-region .tab:selected:hover {
+     -fx-background-color: #3a34ff;
+ }
+
+
+.tab-pane .tab-header-area .headers-region .tab .text {
+    -fx-fill: #ffffff;
+}
+
+/* TAB Body */
+.tab-body,
+.tab-pane:top .tab-content-area {
+    -fx-background-color: #3a34ff;
+}
+
+.tab-body .jfx-slider,
+.tab-body .jfx-combo-box,
+.tab-body .jfx-check-box {
+    -fx-cursor: hand;
+}
+
+.tab-body .jfx-button {
+    -fx-background-color: #0000ff;
+    -fx-text-fill: #ffffff;
+    -fx-cursor: hand;
+}
+
+.tab-body .label-timer {
+    -fx-border-width: 0 0 1px 0;
+    -fx-border-color: silver;
+}
+
+.tab-body .jfx-button:hover {
+    -fx-background-color: brown;
+}
