@@ -41,9 +41,8 @@ public class MainController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         //=========== TAB_PANE ANIMATION EFFECT =================================//
-        tabPane.getSelectionModel().selectedItemProperty().addListener((o, oldTab, newTab) -> {
-            new FadeIn(newTab.getContent()).play();
-        });
+        tabPane.getSelectionModel().selectedItemProperty().addListener((o, oldTab, newTab) ->
+                new FadeIn(newTab.getContent()).play());
 
         //**************************************************************************//
         /*                                                                          */
