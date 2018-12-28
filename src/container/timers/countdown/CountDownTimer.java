@@ -1,4 +1,4 @@
-package container.countdown;
+package container.timers.countdown;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSlider;
@@ -29,7 +29,7 @@ public class CountDownTimer {
     private Integer         minutes;
     private Integer         seconds;
     private Integer         mSec;
-    private BooleanProperty isRunning;
+    private final BooleanProperty isRunning;
 
     public CountDownTimer(ArrayList<JFXSlider> sliders,
                           ArrayList<Label>     labels,
@@ -52,7 +52,7 @@ public class CountDownTimer {
         isRunning = new SimpleBooleanProperty();
     }
 
-    public void init__() {
+    public void __init() {
         sliderHrs.setValue(0);
         sliderMin.setValue(0);
         sliderSec.setValue(0);
@@ -77,6 +77,7 @@ public class CountDownTimer {
         hours   = Integer.valueOf(lbHours.getText());
         minutes = Integer.valueOf(lbMinutes.getText());
         seconds = Integer.valueOf(lbSeconds.getText());
+        mSec    = 0;
 
         // if time is zero do nothing
         if (hours == 0 && minutes == 0 && seconds == 0) return;
@@ -88,7 +89,6 @@ public class CountDownTimer {
     }
 
     private void onTimeTick(ActionEvent event) {
-        if (hours == 0 && minutes == 0 && seconds == 0 && mSec == 0) soundAlarm();
         if (mSec == 0) {
             if (seconds > 0) {
                 seconds--;
@@ -105,6 +105,7 @@ public class CountDownTimer {
                 seconds = 59;
                 mSec    = 99;
             }
+            else soundAlarm();
         }
         else mSec--;
 
@@ -112,12 +113,12 @@ public class CountDownTimer {
         event.consume();
     }
 
-    private void runningStateChanged(boolean newState) {
-        btnAction.setText(newState ? "Stop" : "Start");
+    private void runningStateChanged(boolean isRunning) {
+        btnAction.setText(isRunning ? "Stop" : "Start");
 
-        sliderHrs.setDisable(newState);
-        sliderMin.setDisable(newState);
-        sliderSec.setDisable(newState);
+        sliderHrs.setDisable(isRunning);
+        sliderMin.setDisable(isRunning);
+        sliderSec.setDisable(isRunning);
     }
 
     private String format(Integer integer) {

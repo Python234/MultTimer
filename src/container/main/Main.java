@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    public void start(Stage stage) throws Exception {
+    @Override public void start(Stage stage) throws Exception {
 //        Image icon = new Image(getClass().getResource("/resources/icons/icon.png").toExternalForm());
         Parent parent = FXMLLoader.load(getClass().getResource("main.fxml"));
         Scene scene = new Scene(parent);

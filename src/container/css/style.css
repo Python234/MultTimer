@@ -1,5 +1,5 @@
-.root {
-    -fx-text-background-color: white;
+.text {
+    -fx-fill: white;
 }
 
 /* TAB Head */
@@ -15,8 +15,9 @@
 }
 
 
-.tab-pane .tab-header-area .headers-region .tab:hover {
-    -fx-background-color: brown;
+.tab-pane .tab-header-area .headers-region .tab:hover .text {
+    //-fx-background-color: brown;
+    -fx-style: underline;
 }
 
 .tab-pane .tab-header-area .headers-region .tab:selected {
@@ -58,4 +59,29 @@
 
 .tab-body .jfx-button:hover {
     -fx-background-color: brown;
+}
+
+// ***** Boxing Timer ***** //
+.button-round {
+    -fx-background-radius: 50%;
+    -fx-border-radius: 50%;
+}
+
+.setting-pane-title {
+    -fx-background-color: brown;
+}
+
+.setting-pane-title .label .text {
+    -fx-fill: #000000;
+    -fx-font-style: italic;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+}
+
+.setting-pane-cell {
+    -fx-background-color: #5a34ff;
+}
+
+.setting-pane-cell:hover {
+    -fx-background-color: #005aff;
 }

@@ -2,6 +2,9 @@
   <dictionary name="ALIENWARE_REBORN">
     <words>
       <w>ffffff</w>
+      <w>jdbc</w>
+      <w>pstmt</w>
+      <w>sqlite</w>
     </words>
   </dictionary>
 </component>
