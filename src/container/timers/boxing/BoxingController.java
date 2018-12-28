@@ -5,6 +5,8 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import container.database.dbConnection;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
@@ -60,9 +62,10 @@ public class BoxingController {
     ///////////////////////////////////////////////////////////////////////
     // *************************  Global variables ********************* //
     ///////////////////////////////////////////////////////////////////////
-    private Profile               profile_backup;
-    private final Profile         profile = new Profile();
-    private final Connection      CONN = getConnection();
+    private Profile                  profile_backup;
+    private final ArrayList<Object> profileNames = new ArrayList<>();
+    private final Profile            profile = new Profile();
+    private final Connection         CONN = getConnection();
     // ================================================================= //
 
     /**
@@ -111,8 +114,8 @@ public class BoxingController {
         this.cbStartEndSound            = comboBoxes.get(11);
         this.cbInnerPeriodicSound       = comboBoxes.get(12);
         this.cbRoundWarningSound        = comboBoxes.get(13);
-        this.cbEndOfRestSound           = comboBoxes.get(13);
-        this.cbProfileNames             = comboBoxes.get(14);
+        this.cbEndOfRestSound           = comboBoxes.get(14);
+        this.cbProfileNames             = comboBoxes.get(15);
         this.scrollPane                 = scrollPane;
     }
 
@@ -157,10 +160,22 @@ public class BoxingController {
         profile.restMinProperty().addListener((o, ov, nv) ->                 lbRestTime.setText(nv + ":" + profile.getRestTimeSec()));
         profile.restSecProperty().addListener((o, ov, nv) ->                 lbRestTime.setText(profile.getRestTimeMin() + ":" + nv));
 
+        cpRoundColor.getCustomColors().addListener((ListChangeListener<Color>) c -> updateCustomColors("roundColors", c.getList()));
+        cpRoundWarningColor.getCustomColors().addListener((ListChangeListener<Color>) c -> updateCustomColors("warningColors", c.getList()));
+        cpRestColor.getCustomColors().addListener((ListChangeListener<Color>) c -> updateCustomColors("restColors", c.getList()));
+
+        profile.changeProperty().addListener((o, ov, nv) ->                 { if (ov != nv) profileChangeHandler(nv); });
+
+
         // adding items to the combo-boxes
         ArrayList<Integer> items = new ArrayList<>();
         ArrayList<Integer> rounds = new ArrayList<>();
-        for (int i = 0; i < 60; i++) { items.add(i); rounds.add(i + 1); }
+
+        for (int i = 0; i < 60; i++) {
+            items.add(i);
+            rounds.add(i + 1);
+        }
+
         cbRestMin.getItems().setAll(items);
         cbRestSec.getItems().setAll(items);
         cbRoundMin.getItems().setAll(items);
@@ -173,22 +188,21 @@ public class BoxingController {
         cbPrepareSec.getItems().setAll(items);
         cbNumberOfRounds.getItems().setAll(rounds);
 
-
         // load profile names.
-        loadProfileNames();
+        getProfileNames();
 
         // load sound file names.
-        loadSoundFileNames();
+        getSoundFileNames();
 
         // load custom colors.
-        loadCustomColors();
+        getCustomColors();
 
         // load active profile.
-        loadActiveProfile();
+        getActiveProfile();
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
-    // ************************************* Button Actions ************************************** //
+    // ************************************* Event Handlers ************************************** //
     /////////////////////////////////////////////////////////////////////////////////////////////////
     private void showSettingsPane(ActionEvent event) {
         scrollPane.setVisible(true);
@@ -203,16 +217,16 @@ public class BoxingController {
         hideButton(btnAction);
 
         // show back button
-        showButton(btnBack);
+        showButton(btnBack, false);
 
         // show new button
-        showButton(btnNew);
+        showButton(btnNew, false);
 
         // show save button
-        showButton(btnSave);
+        showButton(btnSave, true);
 
         // show cancel button
-        showButton(btnCancel);
+        showButton(btnCancel, true);
 
         event.consume();
     }
@@ -239,7 +253,7 @@ public class BoxingController {
         hideButton(btnCancel);
 
         // show action button
-        showButton(btnAction);
+        showButton(btnAction, false);
 
         btnCancel.fire();
 
@@ -261,7 +275,22 @@ public class BoxingController {
 
     private void createNewProfile(ActionEvent event) {
         // TODO: code for creating new profile hire
+        if (profile.hasItems()) profile_backup = profile.copy();
+
+        profileNames.clear();
+        profileNames.addAll(cbProfileNames.getItems());
+        clearSettingFields();
+        cbProfileNames.getItems().clear();
+        cbProfileNames.setEditable(true);
+
+        btnCancel.setDisable(false);
         event.consume();
+    }
+
+    private void profileChangeHandler(boolean changed) {
+        btnSave.setDisable(!changed);
+        btnCancel.setDisable(!changed);
+        btnNew.setDisable(cbProfileNames.isEditable());
     }
     // ======================================================================================== //
 
@@ -270,16 +299,15 @@ public class BoxingController {
     // ************************************ Database Interactions ****************************** //
     ///////////////////////////////////////////////////////////////////////////////////////////////
     private Connection getConnection() {
-        try {
-            return dbConnection.getConnection();
-        } catch (SQLException ex) {
+        try { return dbConnection.getConnection(); }
+        catch (SQLException ex) {
             ex.printStackTrace();
             return null;
         }
     }
 
 
-    private void loadProfileNames() {
+    private void getProfileNames() {
         try {
             String query = "SELECT name FROM tbl_profiles";
 
@@ -288,18 +316,14 @@ public class BoxingController {
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.isClosed()) return;
-            while(rs.next()) {
-                cbProfileNames.getItems().add(rs.getString("name"));
-            }
+            while(rs.next()) cbProfileNames.getItems().add(rs.getString("name"));
 
             rs.close();
             pstmt.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+        } catch (SQLException ex) { ex.printStackTrace(); }
     }
 
-    private void loadSoundFileNames() {
+    private void getSoundFileNames() {
         try {
             String query = "SELECT fileName FROM tbl_sounds ORDER BY fileName";
 
@@ -317,12 +341,10 @@ public class BoxingController {
 
             rs.close();
             pstmt.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+        } catch (SQLException ex) { ex.printStackTrace(); }
     }
 
-    private void loadCustomColors() {
+    private void getCustomColors() {
         try {
             String query = "SELECT * FROM tbl_customColors";
 
@@ -347,12 +369,10 @@ public class BoxingController {
 
             rs.close();
             pstmt.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+        } catch (SQLException ex) { ex.printStackTrace(); }
     }
 
-    private void loadActiveProfile() {
+    private void getActiveProfile() {
         try {
             String query = "SELECT * FROM tbl_profiles WHERE state=1";
 
@@ -385,9 +405,23 @@ public class BoxingController {
             rs.close();
             pstmt.close();
 
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+        } catch (SQLException ex) { ex.printStackTrace(); }
+    }
+
+
+
+    private void updateCustomColors(String columnLabel, ObservableList colorsList){
+        try {
+            String query = "UPDATE tbl_customColors SET colors=? WHERE for=?";
+
+            assert CONN != null;
+            PreparedStatement pstmt = CONN.prepareStatement(query);
+            pstmt.setString(1, colorsList.toString());
+            pstmt.setString(2, columnLabel);
+            pstmt.executeUpdate();
+
+            pstmt.close();
+        } catch (SQLException ex) { ex.printStackTrace(); }
     }
     // ============================================================================================= //
 
@@ -400,9 +434,9 @@ public class BoxingController {
         button.setDisable(true);
     }
 
-    private void showButton(JFXButton button) {
+    private void showButton(JFXButton button, boolean disabled) {
         new FadeInUp(button).play();
-        button.setDisable(false);
+        button.setDisable(disabled);
         button.setVisible(true);
     }
 
@@ -411,29 +445,42 @@ public class BoxingController {
         if (colorsString.equals("[]")) return;
 
         String[] colorStringArray = colorsString.replace("[","").replace("]","").split(",");
-        for (String colorString : colorStringArray) {
+        for (String colorString : colorStringArray)
             colorPicker.getCustomColors().add(stringToColor(colorString.trim()));
-        }
     }
 
-    private int getMinutes(String time) {
-        return Integer.valueOf(time.split(":")[0]);
+    private void clearSettingFields() {
+        cbProfileNames.setValue(null);
+        cbNumberOfRounds.setValue(0);
+        cbRoundMin.setValue(0);
+        cbRoundSec.setValue(0);
+        cbRestMin.setValue(0);
+        cbRestSec.setValue(0);
+        cbEndOfRoundWarningMin.setValue(0);
+        cbEndOfRoundWarningSec.setValue(0);
+        cbInnerPeriodicAlertMin.setValue(0);
+        cbInnerPeriodicAlertSec.setValue(0);
+        cbPrepareMin.setValue(0);
+        cbPrepareSec.setValue(0);
+        ckbEnableEndOfRestAlert.setSelected(false);
+        cbStartEndSound.setValue("default");
+        cbRoundWarningSound.setValue("default");
+        cbInnerPeriodicSound.setValue("default");
+        cbEndOfRestSound.setValue("default");
+        cpRoundColor.setValue(Color.GREEN);
+        cpRoundWarningColor.setValue(Color.ORANGE);
+        cpRestColor.setValue(Color.RED);
+        ckbEnableVoice.setSelected(false);
     }
 
-    private int getSeconds(String time) {
-        return Integer.valueOf(time.split(":")[1]);
-    }
+    private int getMinutes(String time) { return Integer.valueOf(time.split(":")[0]); }
 
-    private String joinTime(int minutes, int seconds) {
-        return minutes + ":" + seconds;
-    }
+    private int getSeconds(String time) { return Integer.valueOf(time.split(":")[1]); }
 
-    private Color stringToColor(String colorString) {
-        return Color.valueOf(colorString);
-    }
+    private String joinTime(int minutes, int seconds) { return minutes + ":" + seconds; }
 
-    private String colorToString(Color color) {
-        return color.toString();
-    }
+    private Color stringToColor(String colorString) { return Color.valueOf(colorString); }
+
+    private String colorToString(Color color) { return color.toString(); }
     // ========================================================================================= //
 }

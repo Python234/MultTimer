@@ -2,6 +2,15 @@
     -fx-fill: white;
 }
 
+.label-number {
+    -fx-font-family: "century schoolbook";
+    -fx-font-weight: bold;
+}
+
+.label-screen {
+    -fx-font-size: 49px;
+}
+
 /* TAB Head */
 .tab-pane .tab-header-area .headers-region,
 .tab-pane .tab-header-area .headers-region .tab,
@@ -46,22 +55,46 @@
     -fx-cursor: hand;
 }
 
-.tab-body .jfx-button {
+.tab-body .jfx-button, .button {
     -fx-background-color: #0000ff;
     -fx-text-fill: #ffffff;
     -fx-cursor: hand;
 }
 
+.tab-body .jfx-button:hover, .button:hover {
+    -fx-background-color: brown;
+}
+
+.tab-body .jfx-button:disabled {
+    -fx-background-color: gray;
+}
+
+
+////////////////////////////////////////////
+// ********** Count down timer ********** //
+////////////////////////////////////////////
 .tab-body .label-timer {
     -fx-border-width: 0 0 1px 0;
     -fx-border-color: silver;
 }
 
-.tab-body .jfx-button:hover {
-    -fx-background-color: brown;
+.label-ct {
+    -fx-font-size: 15px;
+}
+// ====================================== //
+
+
+////////////////////////////////////
+// ******** Boxing Timer ******** //
+////////////////////////////////////
+.label-bt {
+    -fx-font-size: 21px;
 }
 
-// ***** Boxing Timer ***** //
+.label-rounds {
+    -fx-font-size: 29px;
+}
+
 .button-round {
     -fx-background-radius: 50%;
     -fx-border-radius: 50%;
@@ -82,6 +115,34 @@
     -fx-background-color: #5a34ff;
 }
 
+.setting-pane-cell-even {
+    -fx-background-color: #5a74d7;
+}
+
 .setting-pane-cell:hover {
     -fx-background-color: #005aff;
 }
+
+.color-picker {
+    -fx-background-color: inherit;
+    -fx-border-width: 0 0 1px 0;
+    -fx-border-color: black;
+}
+
+.jfx-combo-box .text {
+    -fx-font-family: "century schoolbook";
+    -fx-fixed-cell-size: 24px;
+}
+
+.jfx-combo-box .list-cell {
+    -fx-background-color: #5a34ff;
+}
+
+.jfx-combo-box .list-cell:selected {
+    -fx-background-color: brown;
+}
+
+.jfx-combo-box .list-cell:hover {
+    -fx-background-color: brown;
+}
+// ============================================= //
